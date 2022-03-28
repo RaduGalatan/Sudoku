@@ -4,6 +4,8 @@ import android.util.Pair;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.sudoku.Difficulty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class SudokuGame {
 
     private final int sizeRoot;
 
-    public SudokuGame(String difficulty) { int size=9;
+    public SudokuGame(Difficulty difficulty) { int size=9;
        ArrayList<Cell> cells = new ArrayList<>();
 
         for(int i=0;i<size*size;i++){
@@ -53,12 +55,13 @@ public class SudokuGame {
 
     }
 
-    public void fillTable(String difficulty){
+    public void fillTable(Difficulty difficulty){
         fillDiagonal();
         fillTheRest(0,sizeRoot);
 
+        removeDigits(difficulty.getEmptyCells());
 
-        switch(difficulty)
+      /*  switch(difficulty)
         {
             case "Easy":
                 removeDigits(5);
@@ -76,7 +79,7 @@ public class SudokuGame {
                 removeDigits(2);
                 break;
 
-        }
+        }*/
     }
 
 

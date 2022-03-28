@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Pair;
 import android.widget.Button;
 
+import com.example.sudoku.Difficulty;
 import com.example.sudoku.R;
 import com.example.sudoku.game.Cell;
 import com.example.sudoku.game.SudokuGame;
@@ -28,8 +29,7 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-            Bundle b = getIntent().getExtras();
-            String difficulty = b.getString("difficulty");
+            Difficulty difficulty = getIntent().getParcelableExtra("difficulty");
 
             view = (BoardView) findViewById(R.id.boardView);
             view.registerListener(this);

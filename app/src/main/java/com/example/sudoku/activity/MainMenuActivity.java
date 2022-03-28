@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.example.sudoku.Difficulty;
 import com.example.sudoku.R;
 
 public class MainMenuActivity extends AppCompatActivity {
+
+    Difficulty difficulty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,23 +24,23 @@ public class MainMenuActivity extends AppCompatActivity {
 
         easyBtn.setOnClickListener(view -> {
             Intent i = new Intent(MainMenuActivity.this, GameActivity.class);
-            i.putExtra("difficulty",easyBtn.getText().toString());
+            difficulty=new Difficulty(easyBtn.getText().toString());
+            i.putExtra("difficulty",difficulty);
             startActivity(i);
-           // MainMenuActivity.this.finish();
         });
 
         mediumBtn.setOnClickListener(view -> {
             Intent i = new Intent(MainMenuActivity.this, GameActivity.class);
-            i.putExtra("difficulty",mediumBtn.getText().toString());
+            difficulty=new Difficulty(mediumBtn.getText().toString());
+            i.putExtra("difficulty",difficulty);
             startActivity(i);
-            MainMenuActivity.this.finish();
         });
 
         hardBtn.setOnClickListener(view -> {
             Intent i = new Intent(MainMenuActivity.this, GameActivity.class);
-            i.putExtra("difficulty",hardBtn.getText().toString());
+            difficulty=new Difficulty(hardBtn.getText().toString());
+            i.putExtra("difficulty",difficulty);
             startActivity(i);
-            MainMenuActivity.this.finish();
         });
 
 
