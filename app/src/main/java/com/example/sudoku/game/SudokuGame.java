@@ -59,27 +59,8 @@ public class SudokuGame {
         fillDiagonal();
         fillTheRest(0,sizeRoot);
 
-        removeDigits(difficulty.getEmptyCells());
+        removeDigits(difficulty.getDifficultyLevel().getEmptyCells());
 
-      /*  switch(difficulty)
-        {
-            case "Easy":
-                removeDigits(5);
-                break;
-
-            case "Medium":
-                removeDigits(10);
-                break;
-
-            case "Hard":
-                removeDigits(30);
-                break;
-
-            default:
-                removeDigits(2);
-                break;
-
-        }*/
     }
 
 

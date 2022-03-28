@@ -22,7 +22,7 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
 
     private SudokuViewModel viewModel;
     private BoardView view;
-    private final List<Button> buttons=new ArrayList<Button>();
+    private final List<Button> buttons= new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
