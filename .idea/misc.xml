@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/RaduG/AndroidStudioProjects/Sudoku/app/src/main/res/drawable/dropdown_background.xml" value="0.1785" />
         <entry key="..\:/Users/RaduG/AndroidStudioProjects/Sudoku/app/src/main/res/layout/activity_game.xml" value="0.14130434782608695" />
+        <entry key="..\:/Users/RaduG/AndroidStudioProjects/Sudoku/app/src/main/res/layout/activity_lose.xml" value="0.1" />
         <entry key="..\:/Users/RaduG/AndroidStudioProjects/Sudoku/app/src/main/res/layout/activity_main.xml" value="0.12952898550724637" />
         <entry key="..\:/Users/RaduG/AndroidStudioProjects/Sudoku/app/src/main/res/layout/activity_main_menu.xml" value="0.22" />
         <entry key="..\:/Users/RaduG/AndroidStudioProjects/Sudoku/app/src/main/res/layout/activity_victory.xml" value="0.14130434782608695" />

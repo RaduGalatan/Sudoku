@@ -15,6 +15,8 @@ import com.example.sudoku.Difficulty;
 import com.example.sudoku.DifficultyLevel;
 import com.example.sudoku.R;
 
+import java.util.Locale;
+
 public class MainMenuActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     @Override
@@ -38,7 +40,7 @@ public class MainMenuActivity extends AppCompatActivity implements AdapterView.O
             Intent i = new Intent(MainMenuActivity.this, GameActivity.class);
 
             Difficulty difficulty=new Difficulty
-                    (DifficultyLevel.valueOf(spinner.getSelectedItem().toString()));
+                    (DifficultyLevel.valueOf(spinner.getSelectedItem().toString().toUpperCase()));
 
             i.putExtra("difficulty",difficulty);
             startActivity(i);

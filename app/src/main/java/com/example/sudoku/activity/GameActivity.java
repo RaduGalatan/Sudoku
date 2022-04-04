@@ -5,24 +5,33 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Pair;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.sudoku.Difficulty;
+import com.example.sudoku.DifficultyLevel;
 import com.example.sudoku.R;
 import com.example.sudoku.game.Cell;
 import com.example.sudoku.game.SudokuGame;
 import com.example.sudoku.view.BoardView;
 import com.example.sudoku.viewmodel.SudokuViewModel;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 public class GameActivity extends AppCompatActivity implements BoardView.OnTouchListener {
 
     private SudokuViewModel viewModel;
     private BoardView view;
     private final List<Button> buttons= new ArrayList<>();
+    private CountDownTimer timer=null;
+    private long elapsed_time;
+    private long timeLimit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +39,7 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
         setContentView(R.layout.activity_game);
 
             Difficulty difficulty = getIntent().getParcelableExtra("difficulty");
+
 
             view = (BoardView) findViewById(R.id.boardView);
             view.registerListener(this);
@@ -45,6 +55,11 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
 
             initialiseButtons();
             setButtonsListeners();
+
+            if(difficulty.getDifficultyLevel()!= DifficultyLevel.EASY) {
+                timeLimit=difficulty.getDifficultyLevel().getTime();
+                startTimer(difficulty.getDifficultyLevel().getTime());
+            }
     }
 
     private void initialiseButtons(){
@@ -72,10 +87,44 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
             view.invalidate();
             if(viewModel.game.winCondition()){
                 Intent i = new Intent(GameActivity.this,VictoryActivity.class);
+                i.putExtra("time",elapsed_time);
+                i.putExtra("timeLimit",timeLimit);
                 startActivity(i);
                 this.finish();
             }
         }
+    }
+
+    void startTimer(long time) {
+        timer = new CountDownTimer(time, 1000) {
+            public void onTick(long millisUntilFinished) {
+                TextView view=findViewById(R.id.timer);
+
+                NumberFormat f = new DecimalFormat("00");
+                long min = (millisUntilFinished / 60000) % 60;
+                long sec = (millisUntilFinished / 1000) % 60;
+                view.setText(f.format(min) + ":" + f.format(sec));
+
+                elapsed_time = time-millisUntilFinished;
+            }
+
+            public void onFinish() {
+                Intent i = new Intent(GameActivity.this,LoseActivity.class);
+                startActivity(i);
+                finish();
+            }
+        };
+        timer.start();
+    }
+
+    protected void onDestroy() {
+        cancelTimer();
+        super.onDestroy();
+    }
+
+    void cancelTimer() {
+        if(timer!=null)
+            timer.cancel();
     }
 
     private void updatedSelectedCellUI(Pair<Integer,Integer> cell) {

@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sudoku">
         <activity
+            android:name=".activity.LoseActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.MainMenuActivity"
             android:exported="true">
             <intent-filter>
@@ -18,15 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.VictoryActivity"
             android:exported="false" />
-
         <activity
             android:name=".activity.GameActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
     </application>
 
 </manifest>

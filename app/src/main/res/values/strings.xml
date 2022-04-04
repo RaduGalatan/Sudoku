@@ -1,8 +1,11 @@
+
 <resources>
     <string name="app_name">Sudoku</string>
-        <string-array name="difficultyLevels">
-            <item>Easy</item>
-            <item>Medium</item>
-            <item>Hard</item>
-        </string-array>
+    <string name="time">Elapsed time: %s out of %s</string>
+
+    <string-array name="difficultyLevels">
+        <item>EASY</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
 </resources>
