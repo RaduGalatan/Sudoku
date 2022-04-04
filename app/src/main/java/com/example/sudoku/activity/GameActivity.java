@@ -22,7 +22,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 public class GameActivity extends AppCompatActivity implements BoardView.OnTouchListener {
 
@@ -30,8 +29,11 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
     private BoardView view;
     private final List<Button> buttons= new ArrayList<>();
     private CountDownTimer timer=null;
+
     private long elapsed_time;
-    private long timeLimit;
+    private long totalTimeLimit;
+
+    private long timeLeft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +59,9 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
             setButtonsListeners();
 
             if(difficulty.getDifficultyLevel()!= DifficultyLevel.EASY) {
-                timeLimit=difficulty.getDifficultyLevel().getTime();
-                startTimer(difficulty.getDifficultyLevel().getTime());
+                totalTimeLimit =difficulty.getDifficultyLevel().getTime();
+                timeLeft=totalTimeLimit;
+                setTimer();
             }
     }
 
@@ -88,15 +91,16 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
             if(viewModel.game.winCondition()){
                 Intent i = new Intent(GameActivity.this,VictoryActivity.class);
                 i.putExtra("time",elapsed_time);
-                i.putExtra("timeLimit",timeLimit);
+                i.putExtra("timeLimit", totalTimeLimit);
                 startActivity(i);
                 this.finish();
             }
         }
     }
 
-    void startTimer(long time) {
-        timer = new CountDownTimer(time, 1000) {
+    void setTimer() {
+        timer = new CountDownTimer(timeLeft, 1000) {
+
             public void onTick(long millisUntilFinished) {
                 TextView view=findViewById(R.id.timer);
 
@@ -105,7 +109,8 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
                 long sec = (millisUntilFinished / 1000) % 60;
                 view.setText(f.format(min) + ":" + f.format(sec));
 
-                elapsed_time = time-millisUntilFinished;
+                elapsed_time+= timeLeft-millisUntilFinished+1;
+                timeLeft=millisUntilFinished;
             }
 
             public void onFinish() {
@@ -114,12 +119,13 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
                 finish();
             }
         };
-        timer.start();
+
     }
 
+    @Override
     protected void onDestroy() {
-        cancelTimer();
         super.onDestroy();
+        timer.cancel();
     }
 
     void cancelTimer() {
@@ -133,6 +139,20 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
             view.invalidate();
         }
 
+    }
+
+    @Override
+    public void onPause(){
+        timer.cancel();
+        super.onPause();
+    }
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        setTimer();
+       timer.start();
     }
 
     @Override
