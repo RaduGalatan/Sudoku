@@ -45,6 +45,8 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
 
             Difficulty difficulty = getIntent().getParcelableExtra("difficulty");
 
+            TextView difficultyName=findViewById(R.id.difficulty);
+            difficultyName.setText(difficulty.getDifficultyLevel().toString());
 
             view = (BoardView) findViewById(R.id.boardView);
             view.registerListener(this);
@@ -112,7 +114,7 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
                 NumberFormat f = new DecimalFormat("00");
                 long min = (millisUntilFinished / 60000) % 60;
                 long sec = (millisUntilFinished / 1000) % 60;
-                view.setText(f.format(min) + ":" + f.format(sec));
+                view.setText("Time left: "+f.format(min) + ":" + f.format(sec));
 
                 elapsed_time+= timeLeft-millisUntilFinished+1;
                 timeLeft=millisUntilFinished;
