@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 
 import com.example.sudoku.Difficulty;
@@ -18,6 +20,8 @@ import com.example.sudoku.R;
 import java.util.Locale;
 
 public class MainMenuActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    Difficulty difficulty=new Difficulty(DifficultyLevel.EASY);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +40,11 @@ public class MainMenuActivity extends AppCompatActivity implements AdapterView.O
 
         Button startButton=(Button) findViewById(R.id.startButton);
 
+
         startButton.setOnClickListener(view -> {
             Intent i = new Intent(MainMenuActivity.this, GameActivity.class);
-
-            Difficulty difficulty=new Difficulty
-                    (DifficultyLevel.valueOf(spinner.getSelectedItem().toString().toUpperCase()));
-
             i.putExtra("difficulty",difficulty);
+
             startActivity(i);
         });
 
@@ -51,6 +53,26 @@ public class MainMenuActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
          adapterView.getItemAtPosition(pos);
+
+         difficulty=new Difficulty
+                 (DifficultyLevel.valueOf(adapterView.getSelectedItem().toString().toUpperCase()));
+
+         setDifficultyData();
+
+    }
+
+    private void setDifficultyData(){
+        TextView difficultyInfo=findViewById(R.id.difficultyData);
+        String data="Time limit: ";
+
+        if(difficulty.getDifficultyLevel()!= DifficultyLevel.EASY)
+        {
+            data+=((difficulty.getDifficultyLevel().getTime()/60000)%60)+" minutes";
+        }
+        else{
+            data+="no time limit";
+        }
+        difficultyInfo.setText(data);
     }
 
     @Override
