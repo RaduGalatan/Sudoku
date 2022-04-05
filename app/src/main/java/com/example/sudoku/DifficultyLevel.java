@@ -3,7 +3,7 @@ package com.example.sudoku;
 import androidx.annotation.NonNull;
 
 public enum DifficultyLevel {
-    EASY("Easy", 1,0), //time in milliseconds
+    EASY("Easy", 5,0), //time in milliseconds
     MEDIUM("Medium", 10,300000),
     HARD("Hard", 30,600000);
 
