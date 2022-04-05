@@ -10,12 +10,15 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.sudoku.Font;
 import com.example.sudoku.game.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BoardView extends View {
+
+    private Font textFont = Font.MEDIUM;
 
     private Paint thickLinePaint=new Paint(){{
         setStyle(Paint.Style.STROKE);
@@ -28,7 +31,7 @@ public class BoardView extends View {
         setStrokeWidth(2F);
     }};
 
-    private final int size=9;
+    private int size=9;
     private final int sqrtSize=(int)Math.sqrt(size);
     private float cellSizePixels=0F;
 
@@ -48,7 +51,7 @@ public class BoardView extends View {
     private final Paint textPaint=new Paint(){{
         setStyle(Style.FILL_AND_STROKE);
         setColor(Color.BLACK);
-        setTextSize(24F);
+        setTextSize(textFont.getSize());
     }};
 
     private final Paint conflictingCellPaint=new Paint(){{
@@ -60,7 +63,7 @@ public class BoardView extends View {
     {{
         setStyle(Style.FILL_AND_STROKE);
         setColor(Color.WHITE);
-        setTextSize(32F);
+        setTextSize(textFont.getSize());
         setTypeface(Typeface.DEFAULT_BOLD);
     }};
 
@@ -79,7 +82,7 @@ public class BoardView extends View {
         cellSizePixels=(float)(getWidth()/size);
         fillCells(canvas);
         drawLines(canvas);
-        drawNumber(canvas);
+        drawNumber(canvas, textFont.getSize());
     }
 
     @Override
@@ -141,7 +144,7 @@ public class BoardView extends View {
         }
     }
 
-    private void drawNumber(Canvas canvas){
+    private void drawNumber(Canvas canvas,float textSize){
         for(Cell cell: cells) {
             int row = cell.row;
             int col = cell.col;
@@ -160,13 +163,26 @@ public class BoardView extends View {
             Rect bounds=new Rect();
             textPaint.getTextBounds(number,0,number.length(),bounds);
 
-            float textWidth=textPaint.measureText(number);
-            float textHeight=bounds.height();
+         //   float textWidth=textPaint.measureText(number);
+          //  float textHeight=bounds.height();
 
-            canvas.drawText(number,(col*cellSizePixels)+ cellSizePixels/2-textWidth/2,
-                    (row*cellSizePixels)+ cellSizePixels/2-textHeight/2,
+           float desiredSize=textSize/ getResources().getDisplayMetrics().scaledDensity;
+
+          canvas.drawText(number,(col*cellSizePixels)+ cellSizePixels/2-desiredSize/2,
+                    (row*cellSizePixels)+ cellSizePixels/2-desiredSize/2,
                     paintToUse);
         }
+    }
+
+    public void updateTextSize(Font font){
+        this.textFont =font;
+        startingCellTextPaint.setTextSize(font.getSize());
+        textPaint.setTextSize(font.getSize());
+        invalidate();
+    }
+
+    public Font getTextFont(){
+        return textFont;
     }
 
     private void fillCell(Canvas canvas,int row,int col,Paint paint){

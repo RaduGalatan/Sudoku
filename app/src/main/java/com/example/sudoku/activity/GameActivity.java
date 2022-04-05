@@ -6,9 +6,11 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Pair;
+import android.view.View;
 import android.widget.Button;
 
 import com.example.sudoku.Difficulty;
+import com.example.sudoku.Font;
 import com.example.sudoku.R;
 import com.example.sudoku.game.Cell;
 import com.example.sudoku.game.SudokuGame;
@@ -26,28 +28,52 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
     private SudokuViewModel viewModel;
     private BoardView view;
     private final List<Button> buttons= new ArrayList<>();
+    private final List<Font> fonts=new ArrayList<>();
+    private int index;//for cycling through the list of fonts
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-            Difficulty difficulty = getIntent().getParcelableExtra("difficulty");
+        Difficulty difficulty = getIntent().getParcelableExtra("difficulty");
 
-            view = (BoardView) findViewById(R.id.boardView);
-            view.registerListener(this);
+        view = (BoardView) findViewById(R.id.boardView);
+        view.registerListener(this);
 
-            viewModel = new ViewModelProvider(this).get(SudokuViewModel.class);
+        viewModel = new ViewModelProvider(this).get(SudokuViewModel.class);
 
-            viewModel.game=new SudokuGame(difficulty);
-            viewModel.game.selectedCellLiveData.observe(this, this::updatedSelectedCellUI
+        viewModel.game=new SudokuGame(difficulty);
+        viewModel.game.selectedCellLiveData.observe(this, this::updatedSelectedCellUI
             );
 
-            viewModel.game.cellsLiveData.observe(this, this::updateCells
+        viewModel.game.cellsLiveData.observe(this, this::updateCells
             );
 
-            initialiseButtons();
-            setButtonsListeners();
+
+        initialiseFonts();
+        initialiseButtons();
+        setButtonsListeners();
+
+        Button fontButton=findViewById(R.id.buttonFont);
+
+        index=fonts.indexOf(view.getTextFont())+1;
+
+        fontButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                view.updateTextSize(fonts.get(index%fonts.size()));
+                index++;
+            }
+        });
+
+    }
+
+    private void initialiseFonts(){
+
+        fonts.add(Font.SMALL);
+        fonts.add(Font.MEDIUM);
+        fonts.add(Font.LARGE);
     }
 
     private void initialiseButtons(){
