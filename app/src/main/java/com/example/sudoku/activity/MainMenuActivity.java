@@ -25,22 +25,22 @@ public class MainMenuActivity extends AppCompatActivity implements AdapterView.O
 
         //set the content of the dropdown
         Spinner spinner = (Spinner) findViewById(R.id.difficultyModes);
-        ArrayAdapter<DifficultyLevel>adapter=new ArrayAdapter<>
+        ArrayAdapter<DifficultyLevel> adapter = new ArrayAdapter<>
                 (this, android.R.layout.simple_spinner_item, DifficultyLevel.values());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
 
-        Button startButton=(Button) findViewById(R.id.startButton);
+        Button startButton = (Button) findViewById(R.id.startButton);
 
         startButton.setOnClickListener(view -> {
             Intent i = new Intent(MainMenuActivity.this, GameActivity.class);
 
-            Difficulty difficulty=new Difficulty
+            Difficulty difficulty = new Difficulty
                     (DifficultyLevel.valueOf(spinner.getSelectedItem().toString()));
 
-            i.putExtra("difficulty",difficulty);
+            i.putExtra("difficulty", difficulty);
             startActivity(i);
         });
 
@@ -48,7 +48,7 @@ public class MainMenuActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
-         adapterView.getItemAtPosition(pos);
+        adapterView.getItemAtPosition(pos);
     }
 
     @Override

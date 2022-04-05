@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Sudoku</string>
-        <string-array name="difficultyLevels">
+    <string name="aa">aA</string>
+    <string-array name="difficultyLevels">
             <item>Easy</item>
             <item>Medium</item>
             <item>Hard</item>
