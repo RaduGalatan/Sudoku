@@ -4,7 +4,7 @@ import android.util.Pair;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.sudoku.Difficulty;
+import com.example.sudoku.difficulty.Difficulty;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,11 +12,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 
-import com.example.sudoku.Difficulty;
-import com.example.sudoku.DifficultyLevel;
+import com.example.sudoku.difficulty.Difficulty;
+import com.example.sudoku.difficulty.DifficultyLevel;
 import com.example.sudoku.R;
-
-import java.util.Locale;
 
 public class MainMenuActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 

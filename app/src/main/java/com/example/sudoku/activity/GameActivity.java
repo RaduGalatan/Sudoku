@@ -10,11 +10,13 @@ import android.util.Pair;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.sudoku.Difficulty;
-import com.example.sudoku.DifficultyLevel;
+import com.example.sudoku.difficulty.Difficulty;
+import com.example.sudoku.difficulty.DifficultyLevel;
 import com.example.sudoku.R;
 import com.example.sudoku.game.Cell;
 import com.example.sudoku.game.SudokuGame;
+import com.example.sudoku.outcome.GameOutcome;
+import com.example.sudoku.outcome.Outcome;
 import com.example.sudoku.view.BoardView;
 import com.example.sudoku.viewmodel.SudokuViewModel;
 
@@ -28,12 +30,13 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
     private SudokuViewModel viewModel;
     private BoardView view;
     private final List<Button> buttons= new ArrayList<>();
-    private CountDownTimer timer=null;
 
+    private CountDownTimer timer=null;
     private long elapsed_time;
     private long totalTimeLimit;
-
     private long timeLeft; //how much time is left till the game's over; used for preserving the counter
+
+    private GameOutcome outcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +92,11 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
             BoardView.updateCells(cells);
             view.invalidate();
             if(viewModel.game.winCondition()){
-                Intent i = new Intent(GameActivity.this,VictoryActivity.class);
-                i.putExtra("time",elapsed_time);
-                i.putExtra("timeLimit", totalTimeLimit);
+
+                outcome=new GameOutcome(Outcome.WIN,elapsed_time,totalTimeLimit);
+
+                Intent i = new Intent(GameActivity.this,GameResultActivity.class);
+                i.putExtra("outcome",outcome);
                 startActivity(i);
                 this.finish();
             }
@@ -114,7 +119,9 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
             }
 
             public void onFinish() {
-                Intent i = new Intent(GameActivity.this,LoseActivity.class);
+                outcome=new GameOutcome(Outcome.LOSE,0,0);
+                Intent i = new Intent(GameActivity.this,GameResultActivity.class);
+                i.putExtra("outcome",outcome);
                 startActivity(i);
                 finish();
             }
