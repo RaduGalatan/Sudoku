@@ -33,7 +33,7 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
     private long elapsed_time;
     private long totalTimeLimit;
 
-    private long timeLeft;
+    private long timeLeft; //how much time is left till the game's over; used for preserving the counter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +125,7 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        timer.cancel();
+        cancelTimer();
     }
 
     void cancelTimer() {
@@ -143,7 +143,7 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
 
     @Override
     public void onPause(){
-        timer.cancel();
+        cancelTimer();
         super.onPause();
     }
 
@@ -151,8 +151,11 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
     @Override
     public void onResume(){
         super.onResume();
-        setTimer();
-       timer.start();
+
+        if(totalTimeLimit!=0) {
+            setTimer();
+            timer.start();
+        }
     }
 
     @Override
