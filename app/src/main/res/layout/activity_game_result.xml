@@ -7,12 +7,12 @@
     tools:context=".activity.VictoryActivity">
 
     <TextView
-        android:id="@+id/victoryText"
+        android:id="@+id/outcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="YOU WIN!"
+        android:text=""
         android:textSize="50dp" />
 
     <TextView
@@ -22,12 +22,12 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_below="@+id/victoryText"
+        android:layout_below="@+id/outcomeText"
         android:textSize="20dp"
         />
 
     <Button
-        android:id="@+id/restartButton"
+        android:id="@+id/restartButton3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Play again"
