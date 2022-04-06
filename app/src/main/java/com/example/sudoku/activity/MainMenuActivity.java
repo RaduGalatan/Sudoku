@@ -16,9 +16,11 @@ import com.example.sudoku.difficulty.Difficulty;
 import com.example.sudoku.difficulty.DifficultyLevel;
 import com.example.sudoku.R;
 
+import java.util.Locale;
+
 public class MainMenuActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    Difficulty difficulty=new Difficulty(DifficultyLevel.EASY);
+    Difficulty difficulty = new Difficulty(DifficultyLevel.EASY);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,19 +30,19 @@ public class MainMenuActivity extends AppCompatActivity implements AdapterView.O
 
         //set the content of the dropdown
         Spinner spinner = (Spinner) findViewById(R.id.difficultyModes);
-        ArrayAdapter<DifficultyLevel>adapter=new ArrayAdapter<>
+        ArrayAdapter<DifficultyLevel> adapter = new ArrayAdapter<>
                 (this, android.R.layout.simple_spinner_item, DifficultyLevel.values());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
 
-        Button startButton=(Button) findViewById(R.id.startButton);
+        Button startButton = (Button) findViewById(R.id.startButton);
 
 
         startButton.setOnClickListener(view -> {
             Intent i = new Intent(MainMenuActivity.this, GameActivity.class);
-            i.putExtra("difficulty",difficulty);
+            i.putExtra("difficulty", difficulty);
 
             startActivity(i);
         });
@@ -49,25 +51,24 @@ public class MainMenuActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
-         adapterView.getItemAtPosition(pos);
+        adapterView.getItemAtPosition(pos);
 
-         difficulty=new Difficulty
-                 (DifficultyLevel.valueOf(adapterView.getSelectedItem().toString().toUpperCase()));
+        difficulty = new Difficulty
+                (DifficultyLevel.valueOf(adapterView.getSelectedItem().toString().toUpperCase()));
 
-         setDifficultyData();
+        setDifficultyData();
 
     }
 
-    private void setDifficultyData(){
-        TextView difficultyInfo=findViewById(R.id.difficultyData);
-        String data="Time limit: ";
+    private void setDifficultyData() {
+        TextView difficultyInfo = findViewById(R.id.difficultyData);
+        String data;
 
-        if(difficulty.getDifficultyLevel()!= DifficultyLevel.EASY)
-        {
-            data+=((difficulty.getDifficultyLevel().getTime()/60000)%60)+" minutes";
-        }
-        else{
-            data+="no time limit";
+        if (difficulty.getDifficultyLevel() != DifficultyLevel.EASY) {
+            long minutes = (difficulty.getDifficultyLevel().getTime() / 60000) % 60;
+            data = String.format(Locale.UK, "Time limit: %d minutes", minutes);
+        } else {
+            data = "No time limit";
         }
         difficultyInfo.setText(data);
     }

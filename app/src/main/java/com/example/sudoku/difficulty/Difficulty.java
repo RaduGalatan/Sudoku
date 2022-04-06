@@ -11,8 +11,8 @@ public class Difficulty implements Parcelable {
         return difficultyLevel;
     }
 
-    public Difficulty(DifficultyLevel difficultyLevel){
-        this.difficultyLevel=difficultyLevel;
+    public Difficulty(DifficultyLevel difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
 
     }
 
@@ -39,7 +39,7 @@ public class Difficulty implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-            parcel.writeString(difficultyLevel.name());
+        parcel.writeString(difficultyLevel.name());
     }
 
 }

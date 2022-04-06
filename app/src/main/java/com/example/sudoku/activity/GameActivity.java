@@ -24,14 +24,15 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class GameActivity extends AppCompatActivity implements BoardView.OnTouchListener {
 
     private SudokuViewModel viewModel;
     private BoardView view;
-    private final List<Button> buttons= new ArrayList<>();
+    private final List<Button> buttons = new ArrayList<>();
 
-    private CountDownTimer timer=null;
+    private CountDownTimer timer = null;
     private long elapsed_time;
     private long totalTimeLimit;
     private long timeLeft; //how much time is left till the game's over; used for preserving the counter
@@ -43,62 +44,62 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-            Difficulty difficulty = getIntent().getParcelableExtra("difficulty");
+        Difficulty difficulty = getIntent().getParcelableExtra("difficulty");
 
-            TextView difficultyName=findViewById(R.id.difficulty);
-            difficultyName.setText(difficulty.getDifficultyLevel().toString());
+        TextView difficultyName = findViewById(R.id.difficulty);
+        difficultyName.setText(difficulty.getDifficultyLevel().toString());
 
-            view = (BoardView) findViewById(R.id.boardView);
-            view.registerListener(this);
+        view = (BoardView) findViewById(R.id.boardView);
+        view.registerListener(this);
 
-            viewModel = new ViewModelProvider(this).get(SudokuViewModel.class);
+        viewModel = new ViewModelProvider(this).get(SudokuViewModel.class);
 
-            viewModel.game=new SudokuGame(difficulty);
-            viewModel.game.selectedCellLiveData.observe(this, this::updatedSelectedCellUI
-            );
+        viewModel.game = new SudokuGame(difficulty);
+        viewModel.game.selectedCellLiveData.observe(this, this::updatedSelectedCellUI
+        );
 
-            viewModel.game.cellsLiveData.observe(this, this::updateCells
-            );
+        viewModel.game.cellsLiveData.observe(this, this::updateCells
+        );
 
-            initialiseButtons();
-            setButtonsListeners();
+        initialiseButtons();
+        setButtonsListeners();
 
-            if(difficulty.getDifficultyLevel()!= DifficultyLevel.EASY) {
-                totalTimeLimit =difficulty.getDifficultyLevel().getTime();
-                timeLeft=totalTimeLimit;
-                setTimer();
-            }
-    }
-
-    private void initialiseButtons(){
-        buttons.add((Button)findViewById(R.id.buttonOne));
-        buttons.add((Button)findViewById(R.id.buttonTwo));
-        buttons.add((Button)findViewById(R.id.buttonThree));
-        buttons.add((Button)findViewById(R.id.buttonFour));
-        buttons.add((Button)findViewById(R.id.buttonFive));
-        buttons.add((Button)findViewById(R.id.buttonSix));
-        buttons.add((Button)findViewById(R.id.buttonSeven));
-        buttons.add((Button)findViewById(R.id.buttonEight));
-        buttons.add((Button)findViewById(R.id.buttonNine));
-    }
-
-    private void setButtonsListeners(){
-        for(int i=0;i<buttons.size();i++){
-            int i2 = i;
-            buttons.get(i).setOnClickListener(view -> viewModel.game.handleInput(i2 +1));
+        if (difficulty.getDifficultyLevel() != DifficultyLevel.EASY) {
+            totalTimeLimit = difficulty.getDifficultyLevel().getTime();
+            timeLeft = totalTimeLimit;
+            setTimer();
         }
     }
 
-    private void updateCells(List<Cell> cells){
-        if(cells!=null){
+    private void initialiseButtons() {
+        buttons.add((Button) findViewById(R.id.buttonOne));
+        buttons.add((Button) findViewById(R.id.buttonTwo));
+        buttons.add((Button) findViewById(R.id.buttonThree));
+        buttons.add((Button) findViewById(R.id.buttonFour));
+        buttons.add((Button) findViewById(R.id.buttonFive));
+        buttons.add((Button) findViewById(R.id.buttonSix));
+        buttons.add((Button) findViewById(R.id.buttonSeven));
+        buttons.add((Button) findViewById(R.id.buttonEight));
+        buttons.add((Button) findViewById(R.id.buttonNine));
+    }
+
+    private void setButtonsListeners() {
+        for (int i = 0; i < buttons.size(); i++) {
+            int i2 = i;
+            buttons.get(i).setOnClickListener(view -> viewModel.game.handleInput(i2 + 1));
+        }
+    }
+
+    private void updateCells(List<Cell> cells) {
+        if (cells != null) {
             BoardView.updateCells(cells);
             view.invalidate();
-            if(viewModel.game.winCondition()){
+            if (viewModel.game.winCondition()) {
 
-                outcome=new GameOutcome(Outcome.WIN,elapsed_time,totalTimeLimit);
+                outcome = new GameOutcome(Outcome.WIN, elapsed_time, totalTimeLimit);
 
-                Intent i = new Intent(GameActivity.this,GameResultActivity.class);
-                i.putExtra("outcome",outcome);
+                Intent i = new Intent(GameActivity.this, GameResultActivity.class);
+                i.putExtra("outcome", outcome);
                 startActivity(i);
                 this.finish();
             }
@@ -109,21 +110,23 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
         timer = new CountDownTimer(timeLeft, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                TextView view=findViewById(R.id.timer);
+                TextView view = findViewById(R.id.timer);
 
                 NumberFormat f = new DecimalFormat("00");
-                long min = (millisUntilFinished / 60000) % 60;
-                long sec = (millisUntilFinished / 1000) % 60;
-                view.setText("Time left: "+f.format(min) + ":" + f.format(sec));
+                String min = f.format((millisUntilFinished / 60000) % 60);
+                String sec = f.format((millisUntilFinished / 1000) % 60);
 
-                elapsed_time+= timeLeft-millisUntilFinished+1;
-                timeLeft=millisUntilFinished;
+                String timeLeftString = String.format(Locale.ROOT, "Time left: %s:%s", min, sec);
+                view.setText(timeLeftString);
+
+                elapsed_time += timeLeft - millisUntilFinished + 1;
+                timeLeft = millisUntilFinished;
             }
 
             public void onFinish() {
-                outcome=new GameOutcome(Outcome.LOSE,0,0);
-                Intent i = new Intent(GameActivity.this,GameResultActivity.class);
-                i.putExtra("outcome",outcome);
+                outcome = new GameOutcome(Outcome.LOSE, 0, 0);
+                Intent i = new Intent(GameActivity.this, GameResultActivity.class);
+                i.putExtra("outcome", outcome);
                 startActivity(i);
                 finish();
             }
@@ -138,30 +141,30 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
     }
 
     void cancelTimer() {
-        if(timer!=null)
+        if (timer != null)
             timer.cancel();
     }
 
-    private void updatedSelectedCellUI(Pair<Integer,Integer> cell) {
+    private void updatedSelectedCellUI(Pair<Integer, Integer> cell) {
         if (cell != null) {
-            BoardView.updateSelectedCellUI(cell.first,cell.second);
+            BoardView.updateSelectedCellUI(cell.first, cell.second);
             view.invalidate();
         }
 
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         cancelTimer();
         super.onPause();
     }
 
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 
-        if(totalTimeLimit!=0) {
+        if (totalTimeLimit != 0) {
             setTimer();
             timer.start();
         }
@@ -169,6 +172,6 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
 
     @Override
     public void onCellTouched(int row, int col) {
-        viewModel.game.updateSelectedCell(row,col);
+        viewModel.game.updateSelectedCell(row, col);
     }
 }
