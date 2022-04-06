@@ -21,16 +21,16 @@ public class GameOutcome implements Parcelable {
         return timeLimit;
     }
 
-    public GameOutcome(Outcome outcome, long timeElapsed, long timeLimit){
-        this.outcome=outcome;
-        this.timeElapsed=timeElapsed;
-        this.timeLimit=timeLimit;
+    public GameOutcome(Outcome outcome, long timeElapsed, long timeLimit) {
+        this.outcome = outcome;
+        this.timeElapsed = timeElapsed;
+        this.timeLimit = timeLimit;
     }
 
     protected GameOutcome(Parcel in) {
-        outcome=Outcome.valueOf(in.readString());
-        timeElapsed=in.readLong();
-        timeLimit=in.readLong();
+        outcome = Outcome.valueOf(in.readString());
+        timeElapsed = in.readLong();
+        timeLimit = in.readLong();
     }
 
     public static final Creator<GameOutcome> CREATOR = new Creator<GameOutcome>() {

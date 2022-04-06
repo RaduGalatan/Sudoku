@@ -10,7 +10,7 @@ public class SudokuViewModel extends ViewModel {
 
     public SudokuGame game;
 
-    public SudokuViewModel(){
+    public SudokuViewModel() {
         super();
     }
 }

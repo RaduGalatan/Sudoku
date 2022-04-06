@@ -1,26 +1,24 @@
 package com.example.sudoku.outcome;
 
+import android.content.res.Resources;
+
 import androidx.annotation.NonNull;
 
+import com.example.sudoku.R;
+
 public enum Outcome {
-    WIN("YOU WIN!"),
-    LOSE("YOU LOSE!");
+    WIN(R.string.victory),
+    LOSE(R.string.defeat);
 
-    private final String outcome;
+    private final int outcome;
 
-    public String getOutcome(){
-        return outcome;
+    Outcome(int outcome) {
+        this.outcome = outcome;
     }
-
-    Outcome(String outcome){
-        this.outcome=outcome;
-    }
-
 
 
     @NonNull
-    @Override
-    public String toString() {
-        return outcome;
+    public String toString(Resources r) {
+        return r.getString(outcome);
     }
 }
