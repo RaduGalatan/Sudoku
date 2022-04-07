@@ -50,7 +50,7 @@ public class GameResultActivity extends AppCompatActivity {
             timeView.setText("");
         }
 
-        Button btn = (Button) findViewById(R.id.restartButton3);
+        Button btn = (Button) findViewById(R.id.restartButton);
 
         btn.setOnClickListener(view -> {
             Intent i = new Intent(GameResultActivity.this, MainMenuActivity.class);

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.Pair;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,6 +14,8 @@ import com.example.sudoku.difficulty.DifficultyLevel;
 import com.example.sudoku.R;
 import com.example.sudoku.game.Cell;
 import com.example.sudoku.game.SudokuGame;
+import com.example.sudoku.gameTime.GameClock;
+import com.example.sudoku.gameTime.GameTimeout;
 import com.example.sudoku.outcome.GameOutcome;
 import com.example.sudoku.outcome.Outcome;
 import com.example.sudoku.view.BoardView;
@@ -32,12 +33,11 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
     private BoardView view;
     private final List<Button> buttons = new ArrayList<>();
 
-    private CountDownTimer timer = null;
-    private long elapsed_time;
-    private long totalTimeLimit;
-    private long timeLeft; //how much time is left till the game's over; used for preserving the counter
+    private long timeLimit;
 
+    private GameTimeout counter;
     private GameOutcome outcome;
+    private GameClock gameClock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +65,33 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
         setButtonsListeners();
 
         if (difficulty.getDifficultyLevel() != DifficultyLevel.EASY) {
-            totalTimeLimit = difficulty.getDifficultyLevel().getTime();
-            timeLeft = totalTimeLimit;
-            setTimer();
+            timeLimit = difficulty.getDifficultyLevel().getTime();
+            gameClock = new GameClock() {
+                @Override
+                public void onUpdate(int sec, int min, long elapsedTime) {
+                    TextView view = findViewById(R.id.timer);
+
+                    NumberFormat f = new DecimalFormat("00");
+                    String formattedSec = f.format(sec);
+                    String formattedMin = f.format(min);
+                    String timeLeftString = String.format(Locale.ROOT, "Time left: %s:%s", formattedMin,
+                            formattedSec);
+                    view.setText(timeLeftString);
+                }
+
+                @Override
+                public void onStop(long elapsedTime) {
+                    outcome = new GameOutcome(Outcome.LOSE, elapsedTime, 0);
+                    Intent i = new Intent(GameActivity.this, GameResultActivity.class);
+                    i.putExtra("outcome", outcome);
+                    startActivity(i);
+                    finish();
+                }
+
+            };
+
+            counter = new GameTimeout(timeLimit, 0, gameClock);
+
         }
     }
 
@@ -95,9 +119,11 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
             BoardView.updateCells(cells);
             view.invalidate();
             if (viewModel.game.winCondition()) {
-
-                outcome = new GameOutcome(Outcome.WIN, elapsed_time, totalTimeLimit);
-
+                if (counter != null) {
+                    outcome = new GameOutcome(Outcome.WIN, counter.getElapsedTime(), timeLimit);
+                } else {
+                    outcome = new GameOutcome(Outcome.WIN, 0, timeLimit);
+                }
                 Intent i = new Intent(GameActivity.this, GameResultActivity.class);
                 i.putExtra("outcome", outcome);
                 startActivity(i);
@@ -106,44 +132,16 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
         }
     }
 
-    void setTimer() {
-        timer = new CountDownTimer(timeLeft, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                TextView view = findViewById(R.id.timer);
-
-                NumberFormat f = new DecimalFormat("00");
-                String min = f.format((millisUntilFinished / 60000) % 60);
-                String sec = f.format((millisUntilFinished / 1000) % 60);
-
-                String timeLeftString = String.format(Locale.ROOT, "Time left: %s:%s", min, sec);
-                view.setText(timeLeftString);
-
-                elapsed_time += timeLeft - millisUntilFinished + 1;
-                timeLeft = millisUntilFinished;
-            }
-
-            public void onFinish() {
-                outcome = new GameOutcome(Outcome.LOSE, 0, 0);
-                Intent i = new Intent(GameActivity.this, GameResultActivity.class);
-                i.putExtra("outcome", outcome);
-                startActivity(i);
-                finish();
-            }
-        };
-
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        cancelTimer();
+
+        if (counter != null) {
+            counter.pauseTimer();
+        }
     }
 
-    void cancelTimer() {
-        if (timer != null)
-            timer.cancel();
-    }
 
     private void updatedSelectedCellUI(Pair<Integer, Integer> cell) {
         if (cell != null) {
@@ -155,18 +153,18 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
 
     @Override
     public void onPause() {
-        cancelTimer();
         super.onPause();
+        if (counter != null) {
+            counter.pauseTimer();
+        }
     }
-
 
     @Override
     public void onResume() {
         super.onResume();
-
-        if (totalTimeLimit != 0) {
-            setTimer();
-            timer.start();
+        if (counter != null) {
+            counter = counter.resume(counter.getElapsedTime(), gameClock);
+            counter.start();
         }
     }
 
@@ -174,4 +172,6 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
     public void onCellTouched(int row, int col) {
         viewModel.game.updateSelectedCell(row, col);
     }
+
+
 }
