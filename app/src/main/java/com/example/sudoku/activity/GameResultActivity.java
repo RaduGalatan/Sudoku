@@ -3,6 +3,7 @@ package com.example.sudoku.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sudoku.R;
+import com.example.sudoku.TimeFunctions.TimeConvert;
 import com.example.sudoku.outcome.GameOutcome;
 
 import android.content.Intent;
@@ -34,14 +35,15 @@ public class GameResultActivity extends AppCompatActivity {
         if (limit != 0) {
             NumberFormat f = new DecimalFormat("00");
 
-            long limitMin = (limit / 60000) % 60;
-            long limitSec = (limit / 1000) % 60;
+
+            int limitMin = TimeConvert.millisToMin(limit);
+            int limitSec = TimeConvert.millisToSec(limit);
             //time limit in mm:ss format
             String arg1 = String.format("%s:%s", f.format(limitMin), f.format(limitSec));
 
             long elapsedTime = outcome.getTimeElapsed();
-            long elapsedMin = (elapsedTime / 60000) % 60;
-            long elapsedSec = (elapsedTime / 1000) % 60;
+            long elapsedMin = TimeConvert.millisToMin(elapsedTime);
+            long elapsedSec = TimeConvert.millisToSec(elapsedTime);
             //elapsed time in mm:ss format
             String arg2 = String.format("%s:%s", f.format(elapsedMin), f.format(elapsedSec));
 

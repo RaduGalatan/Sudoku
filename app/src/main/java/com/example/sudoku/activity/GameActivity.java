@@ -25,7 +25,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class GameActivity extends AppCompatActivity implements BoardView.OnTouchListener {
 
@@ -74,8 +73,7 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
                     NumberFormat f = new DecimalFormat("00");
                     String formattedSec = f.format(sec);
                     String formattedMin = f.format(min);
-                    String timeLeftString = String.format(Locale.ROOT, "Time left: %s:%s", formattedMin,
-                            formattedSec);
+                    String timeLeftString = getResources().getString(R.string.time_left, formattedMin, formattedSec);
                     view.setText(timeLeftString);
                 }
 
@@ -165,7 +163,7 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
     public void onResume() {
         super.onResume();
         if (counter != null) {
-            counter = counter.resume(counter.getElapsedTime(), gameClock);
+            counter = new GameTimeout(counter.getTimeLeft(), counter.getElapsedTime(), gameClock);
             counter.start();
         }
     }

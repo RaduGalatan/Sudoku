@@ -12,11 +12,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 
+import com.example.sudoku.TimeFunctions.TimeConvert;
 import com.example.sudoku.difficulty.Difficulty;
 import com.example.sudoku.difficulty.DifficultyLevel;
 import com.example.sudoku.R;
 
-import java.util.Locale;
 
 public class MainMenuActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -65,10 +65,10 @@ public class MainMenuActivity extends AppCompatActivity implements AdapterView.O
         String data;
 
         if (difficulty.getDifficultyLevel() != DifficultyLevel.EASY) {
-            long minutes = (difficulty.getDifficultyLevel().getTime() / 60000) % 60;
-            data = String.format(Locale.UK, "Time limit: %d minutes", minutes);
+            long minutes = TimeConvert.millisToMin(difficulty.getDifficultyLevel().getTime());
+            data = getResources().getString(R.string.time_limit, minutes);
         } else {
-            data = "No time limit";
+            data = getString(R.string.no_limit);
         }
         difficultyInfo.setText(data);
     }

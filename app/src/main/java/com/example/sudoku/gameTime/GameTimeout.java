@@ -2,11 +2,13 @@ package com.example.sudoku.gameTime;
 
 import android.os.CountDownTimer;
 
+import com.example.sudoku.TimeFunctions.TimeConvert;
+
 public class GameTimeout {
     private long elapsedTime;
-    private long timeLimit;
-    private static long timeLeft;
-    private CountDownTimer timer;
+    private final long timeLimit;
+    private long timeLeft;
+    private final CountDownTimer timer;
 
     public GameTimeout(long time_limit, long time_elapsed, GameClock clock) {
         this.timeLimit = time_limit;
@@ -18,8 +20,8 @@ public class GameTimeout {
                 elapsedTime += timeLeft - millisUntilFinished + 1;
                 timeLeft = millisUntilFinished;
 
-                int min = (int) (millisUntilFinished / 60000) % 60;
-                int sec = (int) (millisUntilFinished / 1000) % 60;
+                int min = TimeConvert.millisToMin(millisUntilFinished);
+                int sec = TimeConvert.millisToSec(millisUntilFinished);
                 clock.onUpdate(sec, min, elapsedTime);
             }
 
@@ -35,8 +37,8 @@ public class GameTimeout {
         return elapsedTime;
     }
 
-    public long getTimeLimit() {
-        return timeLimit;
+    public long getTimeLeft() {
+        return timeLeft;
     }
 
     public void pauseTimer() {
@@ -45,10 +47,6 @@ public class GameTimeout {
 
     public void start() {
         timer.start();
-    }
-
-    public GameTimeout resume(long elapsed_time, GameClock clock) {
-        return new GameTimeout(timeLeft, elapsed_time, clock);
     }
 
 }
