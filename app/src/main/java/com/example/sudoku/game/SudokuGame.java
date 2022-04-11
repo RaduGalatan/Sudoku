@@ -16,6 +16,11 @@ public class SudokuGame {
 
     private int selectedRow = -1;
     private int selectedCol = -1;
+    private int moves = 0;
+
+    public int getMoves() {
+        return moves;
+    }
 
     final Board board;
 
@@ -50,6 +55,7 @@ public class SudokuGame {
         if (selectedCol == -1 || selectedRow == -1) return;
         if (board.getCell(selectedRow, selectedCol).isStartingCell) return;
 
+        moves++;
         board.getCell(selectedRow, selectedCol).value = number;
         cellsLiveData.postValue(board.cells);
 

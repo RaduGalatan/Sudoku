@@ -81,7 +81,7 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
 
                 @Override
                 public void onStop(long elapsedTime) {
-                    outcome = new GameOutcome(Outcome.LOSE, elapsedTime, 0);
+                    outcome = new GameOutcome(Outcome.LOSE, elapsedTime, 0, 0);
                     Intent i = new Intent(GameActivity.this, GameResultActivity.class);
                     i.putExtra("outcome", outcome);
                     startActivity(i);
@@ -120,9 +120,11 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
             view.invalidate();
             if (viewModel.game.winCondition()) {
                 if (counter != null) {
-                    outcome = new GameOutcome(Outcome.WIN, counter.getElapsedTime(), timeLimit);
+                    outcome = new GameOutcome(Outcome.WIN, counter.getElapsedTime(),
+                            timeLimit, viewModel.game.getMoves());
                 } else {
-                    outcome = new GameOutcome(Outcome.WIN, 0, timeLimit);
+                    outcome = new GameOutcome(Outcome.WIN, 0,
+                            timeLimit, viewModel.game.getMoves());
                 }
                 Intent i = new Intent(GameActivity.this, GameResultActivity.class);
                 i.putExtra("outcome", outcome);

@@ -8,6 +8,7 @@ public class GameOutcome implements Parcelable {
     private final Outcome outcome;
     private final long timeElapsed;
     private final long timeLimit;
+    private final int moves;
 
     public Outcome getOutcome() {
         return outcome;
@@ -17,20 +18,26 @@ public class GameOutcome implements Parcelable {
         return timeElapsed;
     }
 
+    public int getMoves() {
+        return moves;
+    }
+
     public long getTimeLimit() {
         return timeLimit;
     }
 
-    public GameOutcome(Outcome outcome, long timeElapsed, long timeLimit) {
+    public GameOutcome(Outcome outcome, long timeElapsed, long timeLimit, int moves) {
         this.outcome = outcome;
         this.timeElapsed = timeElapsed;
         this.timeLimit = timeLimit;
+        this.moves = moves;
     }
 
     protected GameOutcome(Parcel in) {
         outcome = Outcome.valueOf(in.readString());
         timeElapsed = in.readLong();
         timeLimit = in.readLong();
+        moves = in.readInt();
     }
 
     public static final Creator<GameOutcome> CREATOR = new Creator<GameOutcome>() {
@@ -55,5 +62,6 @@ public class GameOutcome implements Parcelable {
         parcel.writeString(outcome.name());
         parcel.writeLong(timeElapsed);
         parcel.writeLong(timeLimit);
+        parcel.writeInt(moves);
     }
 }

@@ -26,8 +26,10 @@ public class GameResultActivity extends AppCompatActivity {
 
         TextView timeView = findViewById(R.id.time);
         TextView outcomeView = findViewById(R.id.outcomeText);
+        TextView movesView = findViewById(R.id.moves);
 
         outcomeView.setText(outcome.getOutcome().toString(getResources()));
+
 
         if (limit != 0) {
             NumberFormat f = new DecimalFormat("00");
@@ -43,11 +45,19 @@ public class GameResultActivity extends AppCompatActivity {
             //elapsed time in mm:ss format
             String arg2 = String.format("%s:%s", f.format(elapsedMin), f.format(elapsedSec));
 
-            String msg = getResources().getString(R.string.time, arg2, arg1);
+            String time = getResources().getString(R.string.time, arg2, arg1);
 
-            timeView.setText(msg);
+            timeView.setText(time);
+
         } else {
             timeView.setText("");
+        }
+
+        if (outcome.getMoves() != 0) {
+            String moves = getResources().getString(R.string.moves, outcome.getMoves());
+            movesView.setText(moves);
+        } else {
+            movesView.setText("");
         }
 
         Button btn = (Button) findViewById(R.id.restartButton);

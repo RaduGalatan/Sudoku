@@ -4,4 +4,5 @@
     <string name="victory">"YOU WIN!</string>
     <string name="defeat">YOU LOSE!</string>
     <string name="play_again">Play again</string>
+    <string name="moves">Number of moves: %d </string>
 </resources>
