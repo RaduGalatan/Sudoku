@@ -8,11 +8,11 @@ public enum Font {
 
     private final int size;
 
-    Font(int size){
-        this.size=size;
+    Font(int size) {
+        this.size = size;
     }
 
-   public int getSize(){
+    public int getSize() {
         return size;
-   }
+    }
 }
