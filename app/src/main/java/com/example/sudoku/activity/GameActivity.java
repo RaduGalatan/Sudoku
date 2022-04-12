@@ -18,6 +18,9 @@ import com.example.sudoku.viewmodel.SudokuViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//comment nr 1
+//comment nr 2
 public class GameActivity extends AppCompatActivity implements BoardView.OnTouchListener {
 
     private SudokuViewModel viewModel;
