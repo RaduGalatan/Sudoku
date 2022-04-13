@@ -22,8 +22,8 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_below="@+id/outcomeText"
-        android:textSize="20dp"
-        />
+        android:textSize="20dp" />
+
     <TextView
         android:id="@+id/moves"
         android:text="@string/moves"
@@ -32,8 +32,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_below="@+id/time"
-        android:textSize="20dp"
-        />
+        android:textSize="20dp" />
 
     <Button
         android:id="@+id/restartButton"
@@ -41,6 +40,6 @@
         android:layout_height="wrap_content"
         android:text="@string/play_again"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

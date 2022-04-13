@@ -9,6 +9,9 @@ import android.util.Pair;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.sudoku.TimeFunctions;
+import com.example.sudoku.database.Score;
+import com.example.sudoku.database.ScoreRepository;
 import com.example.sudoku.difficulty.Difficulty;
 import com.example.sudoku.difficulty.DifficultyLevel;
 import com.example.sudoku.R;
@@ -31,8 +34,10 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
     private SudokuViewModel viewModel;
     private BoardView view;
     private final List<Button> buttons = new ArrayList<>();
+    private ScoreRepository repo;
 
     private long timeLimit;
+    Difficulty difficulty;
 
     private GameTimeout counter;
     private GameOutcome outcome;
@@ -42,8 +47,8 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
-        Difficulty difficulty = getIntent().getParcelableExtra("difficulty");
+        repo = new ScoreRepository(this);
+        difficulty = getIntent().getParcelableExtra("difficulty");
 
         TextView difficultyName = findViewById(R.id.difficulty);
         difficultyName.setText(difficulty.getDifficultyLevel().toString());
@@ -120,6 +125,16 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
                 if (counter != null) {
                     outcome = new GameOutcome(Outcome.WIN, counter.getElapsedTime(),
                             timeLimit, viewModel.game.getMoves());
+
+                    int min = TimeFunctions.TimeConvert.millisToMin(counter.getElapsedTime());
+                    int sec = TimeFunctions.TimeConvert.millisToSec(counter.getElapsedTime());
+                    Score score = new Score(
+                            difficulty.getDifficultyLevel().toString(),
+                            TimeFunctions.TimeConvert.timeToString(min, sec),
+                            viewModel.game.getMoves());
+
+                    repo.insert(score);
+
                 } else {
                     outcome = new GameOutcome(Outcome.WIN, 0,
                             timeLimit, viewModel.game.getMoves());

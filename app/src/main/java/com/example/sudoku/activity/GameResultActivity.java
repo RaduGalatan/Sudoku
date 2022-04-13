@@ -11,9 +11,6 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-
 public class GameResultActivity extends AppCompatActivity {
 
     @Override
@@ -33,19 +30,17 @@ public class GameResultActivity extends AppCompatActivity {
 
 
         if (limit != 0) {
-            NumberFormat f = new DecimalFormat("00");
-
 
             int limitMin = TimeConvert.millisToMin(limit);
             int limitSec = TimeConvert.millisToSec(limit);
             //time limit in mm:ss format
-            String arg1 = String.format("%s:%s", f.format(limitMin), f.format(limitSec));
+            String arg1 = TimeConvert.timeToString(limitMin, limitSec);
 
             long elapsedTime = outcome.getTimeElapsed();
-            long elapsedMin = TimeConvert.millisToMin(elapsedTime);
-            long elapsedSec = TimeConvert.millisToSec(elapsedTime);
+            int elapsedMin = TimeConvert.millisToMin(elapsedTime);
+            int elapsedSec = TimeConvert.millisToSec(elapsedTime);
             //elapsed time in mm:ss format
-            String arg2 = String.format("%s:%s", f.format(elapsedMin), f.format(elapsedSec));
+            String arg2 = TimeConvert.timeToString(elapsedMin, elapsedSec);
 
             String time = getResources().getString(R.string.time, arg2, arg1);
 

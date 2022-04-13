@@ -11,8 +11,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         android:text="@string/welcome"
-        android:textSize="50dp"
-        />
+        android:textSize="50dp" />
 
 
     <TextView
@@ -47,8 +46,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@id/scoresButton"
         android:text="@string/start" />
+
+    <Button
+        android:id="@+id/scoresButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:text="@string/high_scores" />
 
 
 </RelativeLayout>
