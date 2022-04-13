@@ -1,7 +1,5 @@
 package com.example.sudoku.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,19 +7,29 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
-import com.example.sudoku.Difficulty;
-import com.example.sudoku.DifficultyLevel;
 import com.example.sudoku.R;
+import com.example.sudoku.TimeFunctions.TimeConvert;
+import com.example.sudoku.database.SudokuDatabase;
+import com.example.sudoku.difficulty.Difficulty;
+import com.example.sudoku.difficulty.DifficultyLevel;
+
 
 public class MainMenuActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    Difficulty difficulty = new Difficulty(DifficultyLevel.EASY);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
+        SudokuDatabase db = Room.databaseBuilder(getApplicationContext(),
+                SudokuDatabase.class, "sudoku-database").build();
 
         //set the content of the dropdown
         Spinner spinner = (Spinner) findViewById(R.id.difficultyModes);
@@ -33,14 +41,17 @@ public class MainMenuActivity extends AppCompatActivity implements AdapterView.O
 
 
         Button startButton = (Button) findViewById(R.id.startButton);
+        Button scoresButton = (Button) findViewById(R.id.scoresButton);
 
         startButton.setOnClickListener(view -> {
             Intent i = new Intent(MainMenuActivity.this, GameActivity.class);
-
-            Difficulty difficulty = new Difficulty
-                    (DifficultyLevel.valueOf(spinner.getSelectedItem().toString()));
-
             i.putExtra("difficulty", difficulty);
+
+            startActivity(i);
+        });
+
+        scoresButton.setOnClickListener(view -> {
+            Intent i = new Intent(MainMenuActivity.this, ScoreActivity.class);
             startActivity(i);
         });
 
@@ -49,6 +60,25 @@ public class MainMenuActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
         adapterView.getItemAtPosition(pos);
+
+        difficulty = new Difficulty
+                (DifficultyLevel.valueOf(adapterView.getSelectedItem().toString().toUpperCase()));
+
+        setDifficultyData();
+
+    }
+
+    private void setDifficultyData() {
+        TextView difficultyInfo = findViewById(R.id.difficultyData);
+        String data;
+
+        if (difficulty.getDifficultyLevel() != DifficultyLevel.EASY) {
+            long minutes = TimeConvert.millisToMin(difficulty.getDifficultyLevel().getTime());
+            data = getResources().getString(R.string.time_limit, minutes);
+        } else {
+            data = getString(R.string.no_limit);
+        }
+        difficultyInfo.setText(data);
     }
 
     @Override

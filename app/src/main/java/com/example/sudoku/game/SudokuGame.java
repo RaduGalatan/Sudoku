@@ -4,18 +4,23 @@ import android.util.Pair;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.sudoku.Difficulty;
+import com.example.sudoku.difficulty.Difficulty;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SudokuGame {
 
-    public MutableLiveData<Pair<Integer, Integer>> selectedCellLiveData = new MutableLiveData<>();
-    public MutableLiveData<List<Cell>> cellsLiveData = new MutableLiveData<>();
+    public final MutableLiveData<Pair<Integer, Integer>> selectedCellLiveData = new MutableLiveData<>();
+    public final MutableLiveData<List<Cell>> cellsLiveData = new MutableLiveData<>();
 
     private int selectedRow = -1;
     private int selectedCol = -1;
+    private int moves = 0;
+
+    public int getMoves() {
+        return moves;
+    }
 
     final Board board;
 
@@ -50,6 +55,7 @@ public class SudokuGame {
         if (selectedCol == -1 || selectedRow == -1) return;
         if (board.getCell(selectedRow, selectedCol).isStartingCell) return;
 
+        moves++;
         board.getCell(selectedRow, selectedCol).value = number;
         cellsLiveData.postValue(board.cells);
 

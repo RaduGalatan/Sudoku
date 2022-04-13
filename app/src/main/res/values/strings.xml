@@ -1,9 +1,20 @@
 <resources>
     <string name="app_name">Sudoku</string>
     <string name="aa">aA</string>
-    <string-array name="difficultyLevels">
-            <item>Easy</item>
-            <item>Medium</item>
-            <item>Hard</item>
-        </string-array>
+    <string name="time">Elapsed time: %s out of %s</string>
+    <string name="victory">"YOU WIN!</string>
+    <string name="defeat">YOU LOSE!</string>
+    <string name="play_again">Play again</string>
+    <string name="moves">Number of moves: %d </string>
+    <string name="no_limit">No time limit</string>
+    <string name="time_limit">Time limit: %d minutes</string>
+    <string name="time_left">Time left: %s:%s</string>
+    <string name="start">Start</string>
+    <string name="select_a_difficulty">Select a difficulty</string>
+    <string name="welcome">Welcome</string>
+    <string name="high_scores">High Scores</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="time_elapsed">Time elapsed</string>
+    <string name="number_of_moves">No. of moves</string>
+    <string name="back">Back</string>
 </resources>

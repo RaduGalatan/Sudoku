@@ -2,8 +2,8 @@ package com.example.sudoku.game;
 
 public class Cell {
 
-    public int row;
-    public int col;
+    public final int row;
+    public final int col;
     public int value;
     public boolean isStartingCell;
 

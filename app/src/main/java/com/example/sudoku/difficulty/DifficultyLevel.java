@@ -1,23 +1,29 @@
-package com.example.sudoku;
+package com.example.sudoku.difficulty;
 
 import androidx.annotation.NonNull;
 
 public enum DifficultyLevel {
-    Easy("Easy", 5),
-    Medium("Medium", 10),
-    Hard("Hard", 30);
+    EASY("Easy", 5, 0), //time in milliseconds
+    MEDIUM("Medium", 10, 300000),
+    HARD("Hard", 30, 600000);
 
     private final String stringValue;
     private final int intValue;
+    private final long longValue;
 
     public int getEmptyCells() {
         return intValue;
     }
 
 
-    DifficultyLevel(String difficulty, int emptyCells) {
+    public long getTime() {
+        return longValue;
+    }
+
+    DifficultyLevel(String difficulty, int emptyCells, long time) {
         stringValue = difficulty;
         intValue = emptyCells;
+        this.longValue = time;
     }
 
     @NonNull
