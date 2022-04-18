@@ -142,7 +142,7 @@ public class BoardView extends View {
         for (Cell cell : cells) {
             int row = cell.row;
             int col = cell.col;
-            String number = Integer.toString(cell.value);
+            String number =cell.value;
 
             Paint paintToUse;
 

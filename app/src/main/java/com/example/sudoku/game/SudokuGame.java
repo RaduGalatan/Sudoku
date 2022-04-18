@@ -17,6 +17,11 @@ public class SudokuGame {
     private int selectedRow = -1;
     private int selectedCol = -1;
     private int moves = 0;
+    private static int startingEmptyCells;
+
+    public static int getStartingEmptyCells() {
+        return startingEmptyCells;
+    }
 
     public int getMoves() {
         return moves;
@@ -31,7 +36,7 @@ public class SudokuGame {
         ArrayList<Cell> cells = new ArrayList<>();
 
         for (int i = 0; i < size * size; i++) {
-            Cell cell = new Cell(i / 9, i % 9, 0);
+            Cell cell = new Cell(i / 9, i % 9, "");
             cells.add(cell);
         }
 
@@ -51,7 +56,7 @@ public class SudokuGame {
         }
     }
 
-    public void handleInput(int number) {
+    public void handleInput(String number) {
         if (selectedCol == -1 || selectedRow == -1) return;
         if (board.getCell(selectedRow, selectedCol).isStartingCell) return;
 
@@ -65,7 +70,8 @@ public class SudokuGame {
         fillDiagonal();
         fillTheRest(0, sizeRoot);
 
-        removeDigits(difficulty.getDifficultyLevel().getEmptyCells());
+        startingEmptyCells =difficulty.getDifficultyLevel().getEmptyCells();
+        removeDigits(startingEmptyCells);
 
     }
 
@@ -76,7 +82,7 @@ public class SudokuGame {
             fillBox(i, i);
     }
 
-    boolean checkIfSafe(int i, int j, int num) {
+    boolean checkIfSafe(int i, int j, String num) {
         return (unusedInRow(i, num) &&
                 unusedInCol(j, num) &&
                 unusedInBox(i - i % sizeRoot, j - j % sizeRoot, num));
@@ -107,13 +113,13 @@ public class SudokuGame {
         }
 
         for (int num = 1; num <= board.size; num++) {
-            if (checkIfSafe(r, c, num)) {
-                board.getCell(r, c).value = num;
+            if (checkIfSafe(r, c, String.valueOf(num))) {
+                board.getCell(r, c).value =String.valueOf(num);
                 board.getCell(r, c).isStartingCell = true;
                 if (fillTheRest(r, c + 1))
                     return true;
 
-                board.getCell(r, c).value = 0;
+                board.getCell(r, c).value = "";
             }
         }
         return false;
@@ -129,44 +135,44 @@ public class SudokuGame {
             if (j != 0)
                 j = j - 1;
 
-            if (board.getCell(i, j).value != 0) {
+            if (!board.getCell(i, j).value.isEmpty()) {
                 count--;
-                board.getCell(i, j).value = 0;
+                board.getCell(i, j).value = "";
                 board.getCell(i, j).isStartingCell = false;
             }
         }
     }
 
-    boolean unusedInRow(int r, int num) {
+    boolean unusedInRow(int r, String num) {
         for (int c = 0; c < board.size; c++)
-            if (board.getCell(r, c).value == num)
+            if (board.getCell(r, c).value.equals(num))
                 return false;
         return true;
     }
 
-    boolean unusedInCol(int c, int num) {
+    boolean unusedInCol(int c, String num) {
         for (int r = 0; r < board.size; r++)
-            if (board.getCell(r, c).value == num)
+            if (board.getCell(r, c).value.equals(num))
                 return false;
         return true;
     }
 
-    boolean unusedInBox(int row, int col, int num) {
+    boolean unusedInBox(int row, int col, String num) {
         for (int r = 0; r < sizeRoot; r++)
             for (int c = 0; c < sizeRoot; c++)
-                if (board.getCell(row + r, col + c).value == num)
+                if (board.getCell(row + r, col + c).value.equals(num))
                     return false;
 
         return true;
     }
 
     void fillBox(int row, int col) {
-        int num;
+        String num;
 
         for (int i = 0; i < sizeRoot; i++) {
             for (int j = 0; j < sizeRoot; j++) {
                 do {
-                    num = (int) Math.floor((Math.random() * board.size + 1));
+                    num =String.valueOf( (int) Math.floor((Math.random() * board.size + 1)));
                 }
                 while (!unusedInBox(row, col, num));
 
@@ -178,11 +184,11 @@ public class SudokuGame {
 
     boolean rowCondition(int row) {
 
-        List<Integer> uniqueValues = new ArrayList<>();
+        List<String> uniqueValues = new ArrayList<>();
         for (int col = 0; col < board.size; col++) {
 
-            int nr = board.getCell(row, col).value;
-            if (nr == 0) return false;
+            String nr = board.getCell(row, col).value;
+            if (nr.isEmpty()) return false;
             if (uniqueValues.contains(nr)) {
                 return false;
             }
@@ -193,11 +199,11 @@ public class SudokuGame {
 
     boolean columnCondition(int col) {
 
-        List<Integer> uniqueValues = new ArrayList<>();
+        List<String> uniqueValues = new ArrayList<>();
         for (int row = 0; row < board.size; row++) {
 
-            int nr = board.getCell(row, col).value;
-            if (nr <= 0) return false;
+            String nr = board.getCell(row, col).value;
+            if (nr.isEmpty()) return false;
 
             if (uniqueValues.contains(nr)) {
                 return false;
@@ -222,6 +228,7 @@ public class SudokuGame {
         return true;
     }
 
+
     public boolean winCondition() {
 
         return allBoxesCondition() && allRowsCondition() && allColumnsCondition();
@@ -234,7 +241,7 @@ public class SudokuGame {
 
             for (int col = 0; col < board.size - 2; col += 3) {
 
-                List<Integer> uniqueValues = new ArrayList<>();
+                List<String> uniqueValues = new ArrayList<>();
 
                 for (int r = 0; r < 3; r++) {
                     for (int c = 0; c < 3; c++) {
@@ -243,9 +250,9 @@ public class SudokuGame {
 
                         int Y = col + c;
 
-                        int Z = board.getCell(X, Y).value;
+                        String Z = board.getCell(X, Y).value;
 
-                        if (Z == 0) return false;
+                        if (Z.isEmpty()) return false;
 
                         if (uniqueValues.contains(Z)) {
                             return false;

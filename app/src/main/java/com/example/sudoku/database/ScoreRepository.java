@@ -18,7 +18,7 @@ public class ScoreRepository {
 
     public List<Score> getScores() {
         try {
-            return new getScoresAsync(dao).execute().get();
+            return new ReadScoreAsyncTask(dao).execute().get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -28,14 +28,14 @@ public class ScoreRepository {
 
 
     public void insert(Score score) {
-        new insertAsyncTask(dao).execute(score);
+        new CreateAsyncTask(dao).execute(score);
     }
 
 
-    private static class insertAsyncTask extends AsyncTask<Score, Void, Void> {
+    private static class CreateAsyncTask extends AsyncTask<Score, Void, Void> {
         private final ScoreDao mAsyncTaskDao;
 
-        insertAsyncTask(ScoreDao dao) {
+        CreateAsyncTask(ScoreDao dao) {
             mAsyncTaskDao = dao;
         }
 
@@ -47,10 +47,10 @@ public class ScoreRepository {
         }
     }
 
-    private static class getScoresAsync extends AsyncTask<Void, Void, List<Score>> {
+    private static class ReadScoreAsyncTask extends AsyncTask<Void, Void, List<Score>> {
         private final ScoreDao mAsyncTaskDao;
 
-        getScoresAsync(ScoreDao dao) {
+        ReadScoreAsyncTask(ScoreDao dao) {
             mAsyncTaskDao = dao;
         }
 

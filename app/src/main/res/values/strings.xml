@@ -5,7 +5,7 @@
     <string name="victory">"YOU WIN!</string>
     <string name="defeat">YOU LOSE!</string>
     <string name="play_again">Play again</string>
-    <string name="moves">Number of moves: %d </string>
+    <string name="moves">You needed %d extra moves to complete the game </string>
     <string name="no_limit">No time limit</string>
     <string name="time_limit">Time limit: %d minutes</string>
     <string name="time_left">Time left: %s:%s</string>

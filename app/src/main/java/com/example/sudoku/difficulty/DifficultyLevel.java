@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 public enum DifficultyLevel {
     EASY("Easy", 5, 0), //time in milliseconds
-    MEDIUM("Medium", 10, 300000),
+    MEDIUM("Medium", 1, 300000),
     HARD("Hard", 30, 600000);
 
     private final String stringValue;

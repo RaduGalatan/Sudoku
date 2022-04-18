@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sudoku.R;
 import com.example.sudoku.TimeFunctions.TimeConvert;
+import com.example.sudoku.game.SudokuGame;
 import com.example.sudoku.outcome.GameOutcome;
 
 public class GameResultActivity extends AppCompatActivity {
@@ -50,8 +51,10 @@ public class GameResultActivity extends AppCompatActivity {
             timeView.setText("");
         }
 
-        if (outcome.getMoves() != 0) {
-            String moves = getResources().getString(R.string.moves, outcome.getMoves());
+        int extraMoves = outcome.getMoves() - SudokuGame.getStartingEmptyCells();
+        if (extraMoves > 0) {
+
+            String moves = getResources().getString(R.string.moves, extraMoves);
             movesView.setText(moves);
         } else {
             movesView.setText("");

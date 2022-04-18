@@ -125,7 +125,7 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
     private void setButtonsListeners() {
         for (int i = 0; i < buttons.size(); i++) {
             int i2 = i;
-            buttons.get(i).setOnClickListener(view -> viewModel.game.handleInput(i2 + 1));
+            buttons.get(i).setOnClickListener(view -> viewModel.game.handleInput(String.valueOf(i2 + 1)));
         }
     }
 
