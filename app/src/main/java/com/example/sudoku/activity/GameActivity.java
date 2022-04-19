@@ -10,9 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sudoku.Button.FontButton;
-import com.example.sudoku.Font;
 import com.example.sudoku.R;
-import com.example.sudoku.TimeFunctions;
 import com.example.sudoku.database.Score;
 import com.example.sudoku.database.ScoreRepository;
 import com.example.sudoku.difficulty.Difficulty;
@@ -23,6 +21,8 @@ import com.example.sudoku.gameTime.GameClock;
 import com.example.sudoku.gameTime.GameTimeout;
 import com.example.sudoku.outcome.GameOutcome;
 import com.example.sudoku.outcome.Outcome;
+import com.example.sudoku.utility.Font;
+import com.example.sudoku.utility.TimeFunctions;
 import com.example.sudoku.view.BoardView;
 import com.example.sudoku.viewmodel.SudokuViewModel;
 

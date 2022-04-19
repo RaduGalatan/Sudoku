@@ -8,9 +8,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sudoku.R;
-import com.example.sudoku.TimeFunctions.TimeConvert;
 import com.example.sudoku.game.SudokuGame;
 import com.example.sudoku.outcome.GameOutcome;
+import com.example.sudoku.utility.TimeFunctions.TimeConvert;
 
 public class GameResultActivity extends AppCompatActivity {
 

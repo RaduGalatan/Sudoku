@@ -6,31 +6,68 @@
     android:layout_height="match_parent"
     tools:context=".activity.ScoreActivity">
     <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/headers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
+        <LinearLayout
+            android:id="@+id/difficulty_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/difficulty"
             android:textStyle="bold"
-            android:padding="6dp"/>
+            android:padding="6dp" />
+        <ImageView
+            android:id="@+id/difficulty_arrow"
+            android:layout_width="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_height="20dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/time_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/time_elapsed"
-            android:layout_marginStart="60dp"
-            android:textStyle="bold"/>
+            android:layout_marginStart="30dp"
+            android:paddingTop="6dp"
+            android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/time_arrow"
+            android:layout_width="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_height="20dp"/>
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/moves_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/number_of_moves"
-            android:layout_marginStart="40dp"
-            android:textStyle="bold"/>
+            android:paddingTop="6dp"
+            android:layout_marginStart="30dp"
+            android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/moves_arrow"
+            android:layout_width="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_height="20dp"/>
+    </LinearLayout>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/scoreList"
+        android:layout_below="@id/headers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="30dp"

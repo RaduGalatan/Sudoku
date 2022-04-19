@@ -70,7 +70,7 @@ public class SudokuGame {
         fillDiagonal();
         fillTheRest(0, sizeRoot);
 
-        startingEmptyCells =difficulty.getDifficultyLevel().getEmptyCells();
+        startingEmptyCells = difficulty.getDifficultyLevel().getEmptyCells();
         removeDigits(startingEmptyCells);
 
     }
@@ -114,7 +114,7 @@ public class SudokuGame {
 
         for (int num = 1; num <= board.size; num++) {
             if (checkIfSafe(r, c, String.valueOf(num))) {
-                board.getCell(r, c).value =String.valueOf(num);
+                board.getCell(r, c).value = String.valueOf(num);
                 board.getCell(r, c).isStartingCell = true;
                 if (fillTheRest(r, c + 1))
                     return true;
@@ -172,7 +172,7 @@ public class SudokuGame {
         for (int i = 0; i < sizeRoot; i++) {
             for (int j = 0; j < sizeRoot; j++) {
                 do {
-                    num =String.valueOf( (int) Math.floor((Math.random() * board.size + 1)));
+                    num = String.valueOf((int) Math.floor((Math.random() * board.size + 1)));
                 }
                 while (!unusedInBox(row, col, num));
 

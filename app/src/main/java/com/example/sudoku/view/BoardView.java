@@ -10,8 +10,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.sudoku.Font;
 import com.example.sudoku.game.Cell;
+import com.example.sudoku.utility.Font;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,7 +142,7 @@ public class BoardView extends View {
         for (Cell cell : cells) {
             int row = cell.row;
             int col = cell.col;
-            String number =cell.value;
+            String number = cell.value;
 
             Paint paintToUse;
 

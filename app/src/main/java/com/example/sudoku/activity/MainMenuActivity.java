@@ -13,10 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import com.example.sudoku.R;
-import com.example.sudoku.TimeFunctions.TimeConvert;
 import com.example.sudoku.database.SudokuDatabase;
 import com.example.sudoku.difficulty.Difficulty;
 import com.example.sudoku.difficulty.DifficultyLevel;
+import com.example.sudoku.utility.TimeFunctions.TimeConvert;
 
 
 public class MainMenuActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {

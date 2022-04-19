@@ -1,4 +1,6 @@
-package com.example.sudoku;
+package com.example.sudoku.utility;
+
+import android.text.TextUtils;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -19,6 +21,21 @@ public class TimeFunctions {
         public static String timeToString(int min, int sec) {
             NumberFormat f = new DecimalFormat("00");
             return String.format("%s:%s", f.format(min), f.format(sec));
+        }
+
+        private static Long minToMilli(String time) {
+            if (!TextUtils.isDigitsOnly(time)) return 0L;
+            return Long.parseLong(time) * 60000;
+        }
+
+        private static Long secToMilli(String time) {
+            if (!TextUtils.isDigitsOnly(time)) return 0L;
+            return Long.parseLong(time) * 1000;
+        }
+
+        public static Long timeToMilli(String min, String sec) {
+
+            return minToMilli(min) + secToMilli(sec);
         }
     }
 }

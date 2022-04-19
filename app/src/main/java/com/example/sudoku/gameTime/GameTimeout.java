@@ -2,7 +2,7 @@ package com.example.sudoku.gameTime;
 
 import android.os.CountDownTimer;
 
-import com.example.sudoku.TimeFunctions.TimeConvert;
+import com.example.sudoku.utility.TimeFunctions.TimeConvert;
 
 public class GameTimeout {
     private long elapsedTime;

@@ -1,4 +1,4 @@
-package com.example.sudoku;
+package com.example.sudoku.utility;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sudoku.R;
 import com.example.sudoku.database.Score;
 
 import java.util.List;

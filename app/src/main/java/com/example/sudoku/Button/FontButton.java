@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.Button;
 
-import com.example.sudoku.Font;
 import com.example.sudoku.R;
+import com.example.sudoku.utility.Font;
 import com.example.sudoku.view.BoardView;
 
 import java.util.List;
