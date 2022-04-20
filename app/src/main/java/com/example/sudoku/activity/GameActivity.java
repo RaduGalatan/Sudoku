@@ -1,5 +1,7 @@
 package com.example.sudoku.activity;
 
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +9,7 @@ import android.util.Pair;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -184,7 +187,7 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
 
         if (counter != null)
             counter.pauseTimer();
-        super.onBackPressed();
+        Alert(GameActivity.this);
     }
 
     @Override
@@ -225,5 +228,14 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
     @Override
     public void onCellTouched(int row, int col) {
         viewModel.game.updateSelectedCell(row, col);
+    }
+
+    public void Alert(Context context) {
+        new AlertDialog.Builder(context)
+                .setTitle("Exit")
+                .setMessage("Do you want to quit?")
+                .setPositiveButton("Yes", (dialogInterface, i) -> finish())
+                .setNegativeButton("No", null)
+                .show();
     }
 }
