@@ -29,7 +29,7 @@ public class ScoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
 
-        listeners=new Listeners();
+        listeners = new Listeners();
         repo = new ScoreRepository(this);
 
         List<Score> scoreList = repo.getScores();

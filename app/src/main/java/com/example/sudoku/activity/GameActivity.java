@@ -2,6 +2,7 @@ package com.example.sudoku.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import com.example.sudoku.gameTime.GameTimeout;
 import com.example.sudoku.outcome.GameOutcome;
 import com.example.sudoku.outcome.Outcome;
 import com.example.sudoku.utility.Font;
+import com.example.sudoku.utility.GameState;
 import com.example.sudoku.utility.TimeFunctions;
 import com.example.sudoku.view.BoardView;
 import com.example.sudoku.viewmodel.SudokuViewModel;
@@ -45,65 +47,79 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
     private GameTimeout counter;
     private GameOutcome outcome;
     private GameClock gameClock;
+    private FontButton fontButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         repo = new ScoreRepository(this);
-        difficulty = getIntent().getParcelableExtra("difficulty");
 
-        TextView difficultyName = findViewById(R.id.difficulty);
-        difficultyName.setText(difficulty.getDifficultyLevel().toString());
+        gameClock = new GameClock() {
+            @Override
+            public void onUpdate(int sec, int min, long elapsedTime) {
+                TextView view = findViewById(R.id.timer);
+
+                NumberFormat f = new DecimalFormat("00");
+                String formattedSec = f.format(sec);
+                String formattedMin = f.format(min);
+                String timeLeftString = getResources().getString(R.string.time_left, formattedMin, formattedSec);
+                view.setText(timeLeftString);
+            }
+
+            @Override
+            public void onStop(long elapsedTime) {
+                outcome = new GameOutcome(Outcome.LOSE, elapsedTime, 0, 0);
+                Intent i = new Intent(GameActivity.this, GameResultActivity.class);
+                i.putExtra("outcome", outcome);
+                startActivity(i);
+                finish();
+            }
+        };
 
         view = (BoardView) findViewById(R.id.boardView);
         view.registerListener(this);
+        fontButton = findViewById(R.id.buttonFont);
 
-        viewModel = new ViewModelProvider(this).get(SudokuViewModel.class);
+        if (GameState.getGameState() == null) {
+            Log.d("tsk", "fuk");
+            difficulty = getIntent().getParcelableExtra("difficulty");
 
-        viewModel.game = new SudokuGame(difficulty);
+            if (difficulty.getDifficultyLevel() != DifficultyLevel.EASY) {
+                timeLimit = difficulty.getDifficultyLevel().getTime();
+                counter = new GameTimeout(timeLimit, 0, gameClock);
+            }
+            viewModel = new ViewModelProvider(this).get(SudokuViewModel.class);
+            viewModel.game = new SudokuGame(difficulty);
+
+        } else {
+            difficulty = GameState.getGameState().getDifficulty();
+
+            if (difficulty.getDifficultyLevel() != DifficultyLevel.EASY) {
+                timeLimit = difficulty.getDifficultyLevel().getTime();
+                counter = GameState.getGameState().getCounter();
+            }
+            view.updateTextSize(GameState.getGameState().getView().getTextFont());
+            viewModel = GameState.getGameState().getViewModel();
+
+        }
+
         viewModel.game.selectedCellLiveData.observe(this, this::updatedSelectedCellUI
         );
-
         viewModel.game.cellsLiveData.observe(this, this::updateCells
         );
+
+        TextView difficultyName = findViewById(R.id.difficulty);
+        difficultyName.setText(difficulty.getDifficultyLevel().toString());
 
         initialiseFonts();
         initialiseButtons();
         setButtonsListeners();
 
-        FontButton fontButton = findViewById(R.id.buttonFont);
         fontButton.updateTextSize(view, fonts);
-
-        if (difficulty.getDifficultyLevel() != DifficultyLevel.EASY) {
-            timeLimit = difficulty.getDifficultyLevel().getTime();
-            gameClock = new GameClock() {
-                @Override
-                public void onUpdate(int sec, int min, long elapsedTime) {
-                    TextView view = findViewById(R.id.timer);
-
-                    NumberFormat f = new DecimalFormat("00");
-                    String formattedSec = f.format(sec);
-                    String formattedMin = f.format(min);
-                    String timeLeftString = getResources().getString(R.string.time_left, formattedMin, formattedSec);
-                    view.setText(timeLeftString);
-                }
-
-                @Override
-                public void onStop(long elapsedTime) {
-                    outcome = new GameOutcome(Outcome.LOSE, elapsedTime, 0, 0);
-                    Intent i = new Intent(GameActivity.this, GameResultActivity.class);
-                    i.putExtra("outcome", outcome);
-                    startActivity(i);
-                    finish();
-                }
-            };
-            counter = new GameTimeout(timeLimit, 0, gameClock);
-        }
     }
 
     private void initialiseFonts() {
-
         fonts.add(Font.SMALL);
         fonts.add(Font.MEDIUM);
         fonts.add(Font.LARGE);
@@ -151,6 +167,7 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
                     outcome = new GameOutcome(Outcome.WIN, 0,
                             timeLimit, viewModel.game.getMoves());
                 }
+                GameState.newGameState();
                 Intent i = new Intent(GameActivity.this, GameResultActivity.class);
                 i.putExtra("outcome", outcome);
                 startActivity(i);
@@ -159,6 +176,16 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        GameState.createGameState();
+        GameState state = GameState.getGameState();
+        state.setGameData(difficulty, counter, view, viewModel);
+
+        if (counter != null)
+            counter.pauseTimer();
+        super.onBackPressed();
+    }
 
     @Override
     protected void onDestroy() {

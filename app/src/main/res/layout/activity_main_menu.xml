@@ -46,8 +46,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_above="@id/continueButton"
+        android:text="@string/new_game" />
+
+    <Button
+        android:id="@+id/continueButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_above="@id/scoresButton"
-        android:text="@string/start" />
+        android:text="@string/continue_game" />
 
     <Button
         android:id="@+id/scoresButton"

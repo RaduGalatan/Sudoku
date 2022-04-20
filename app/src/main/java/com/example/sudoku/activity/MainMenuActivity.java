@@ -16,16 +16,18 @@ import com.example.sudoku.R;
 import com.example.sudoku.database.SudokuDatabase;
 import com.example.sudoku.difficulty.Difficulty;
 import com.example.sudoku.difficulty.DifficultyLevel;
+import com.example.sudoku.utility.GameState;
 import com.example.sudoku.utility.TimeFunctions.TimeConvert;
 
 
 public class MainMenuActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     Difficulty difficulty = new Difficulty(DifficultyLevel.EASY);
-
+    GameState state = GameState.getGameState();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         SudokuDatabase db = Room.databaseBuilder(getApplicationContext(),
@@ -39,14 +41,14 @@ public class MainMenuActivity extends AppCompatActivity implements AdapterView.O
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
-
         Button startButton = (Button) findViewById(R.id.startButton);
         Button scoresButton = (Button) findViewById(R.id.scoresButton);
+
 
         startButton.setOnClickListener(view -> {
             Intent i = new Intent(MainMenuActivity.this, GameActivity.class);
             i.putExtra("difficulty", difficulty);
-
+            GameState.newGameState();
             startActivity(i);
         });
 
@@ -55,6 +57,33 @@ public class MainMenuActivity extends AppCompatActivity implements AdapterView.O
             startActivity(i);
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Button continueButton = (Button) findViewById(R.id.continueButton);
+        continueButton.setOnClickListener(view -> {
+            Intent i = new Intent(MainMenuActivity.this, GameActivity.class);
+            i.putExtra("difficulty", difficulty);
+            startActivity(i);
+        });
+
+        state = GameState.getGameState();
+
+        if (state == null) {
+            continueButton.setClickable(false);
+            continueButton.setAlpha(0.5f);
+        } else {
+            continueButton.setClickable(true);
+            continueButton.setAlpha(1f);
+        }
     }
 
     @Override
