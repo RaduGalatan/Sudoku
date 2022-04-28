@@ -85,7 +85,6 @@ public class GameActivity extends AppCompatActivity implements BoardView.OnTouch
         fontButton = findViewById(R.id.buttonFont);
 
         if (GameState.getGameState() == null) {
-            Log.d("tsk", "fuk");
             difficulty = getIntent().getParcelableExtra("difficulty");
 
             if (difficulty.getDifficultyLevel() != DifficultyLevel.EASY) {
